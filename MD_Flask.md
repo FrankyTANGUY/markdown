@@ -7,48 +7,51 @@ Flask utilise le moteur de modèle Jinja pour construire dynamiquement des pages
 [un comparatif Flask/Django](https://www.kicklox.com/flask-vs-django-framework-python/#:~:text=Flask%20est%20aujourd'hui%20tr%C3%A8s,une%20architecture%20en%20micro%2Dservices.&text=Django%20est%20un%20framework%20de,suivant%20une%20architecture%20bien%20pr%C3%A9cise.)
 
 Il faut installer Flask avec la commande `pip` : `pip install flask`
-
-    `#import de la biblio
-    from flask import Flask`
-
+***
+    #import de la biblio
+    from flask import Flask
+***
 ## le serveur web
 
 Voici comment démarrer un serveur web et afficher une première information sur un navigateur.
-
-    `# __name__ super variable qui contient le nom du module Python courant
+***
+    # __name__ super variable qui contient le nom du module Python courant
     app = Flask(__name__)
 
     # décorateur qui va servir la fonction en réponse http
     # ici c'est la racine du serveur web '/'
     @app.route('/')
     def hello():
-        return 'Hello, World!'
+        return 'Hello, World!
+***
 
     # Démarer le serveur
     # le debug=true permet d'afficher les messages du serveur dans la console
     if __name__ == "__main__":
-        app.run(debug=True)`
+        app.run(debug=True)
+***
 
 ## page html
 
 Les applications web utilisent principalement le HTML pour afficher des informations. Il faut donc intégrer des fichiers HTML à votre application, pour obtenir des pages web.
 
 Flask fournit une fonction d'aide `render_template()` qui permet l'utilisation du [moteur de modèle Jinja](https://jinja.palletsprojects.com/en/2.11.x/). Cela facilitera grandement la gestion des pages en écrivant votre code directement dans des fichiers `.html`.
-
-    `from flask import Flask, render_template
+***
+    from flask import Flask, render_template
 
     app = Flask(__name__)
 
     @app.route('/')
     def index():
         # return le rendu d'un fichier html
-        return render_template('index.html')`
+        return render_template('index.html')
+***
 
 Pour que ça fonctionne, le fichier `index.html` doit être dans un répertoire `templates` placé à la racine du projet.
 
 Les applications web de Flask disposent aussi d'un dossier `static` pour l'hébergement des fichiers ressources (css, images, js...).
-
-    `<!-- fichier templates/index.html -->
+***
+    <!-- fichier templates/index.html -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -61,18 +64,19 @@ Les applications web de Flask disposent aussi d'un dossier `static` pour l'hébe
     <body>
         <h1>Hello</h1>
     </body>
-    </html>`
+    </html>
+***
 
 l'injection de code, dans le template, se fait par `{{}}` et la méthode `url_for()` va générer le chemin à partir du répertoire `static` lorsque celui-ci est spécifié en premier argument, et dont le fichier est défini en second argument `filename= 'css/style.css'`.
-
-    `/* fichier static/css/style.css */
+***
+    /* fichier static/css/style.css */
     h1{
         width:100%;
         color:white;
         background-color: black;
         text-align: center;
-    }`
-
+    }
+***
 Ce code a pour résultat :
 
 ![Page web]()
@@ -80,8 +84,8 @@ Ce code a pour résultat :
 ## L'héritage de modèles
 
 On va profiter du code Python pour ne pas avoir toutes les pages à créer en HTML. [Jinja propose un système d'héritage](https://jinja.palletsprojects.com/en/2.10.x/templates/#template-inheritance) qui aide à la conception de modèles et à sa réutilisation dans les pages web.
-
-`<!-- fichier templates/base.html -->
+***
+<!-- fichier templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,15 +99,16 @@ On va profiter du code Python pour ne pas avoir toutes les pages à créer en HT
     <article>{% block content %} {% endblock %}</article>
     <a href="{{ url_for('index') }}">retour à la page d'accueil</a>
 </body>
-</html>`
+</html>
+***
 
 - {% block title %} {% endblock %}: ce bloque de titre indique où il faut insérer le titre sur la page html.
 - {{url_for('index')}}: retourne l'url correspondant à la fonction index()dans le code Python.
 - {% block content %} {% endblock %}: ce bloque de contenu indique où il faut insérer le contenu sur la page html.
 
 Il existe encore beaucoup d'autres bloques, détaillés dans la doc officiel de Jinja.
-
-    `<!-- fichier templates/index.html -->
+***
+    <!-- fichier templates/index.html -->
     {% extends 'base.html' %}
 
 
@@ -113,13 +118,14 @@ Il existe encore beaucoup d'autres bloques, détaillés dans la doc officiel de 
         <p>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore sit, autem aspernatur numquam inventore ut illum excepturi laborum magnam vitae quaerat distinctio assumenda ea. Perspiciatis facilis exercitationem optio laudantium quis.
         </p>
-    {% endblock %}`
+    {% endblock %}
+***
 
 ##Data binding
 
 Il est possible de passer des valeurs au fichier html à partir du Python en passant par un dictionnaire.
-
-    `#import de la biblio
+***
+    #import de la biblio
     from flask import Flask, render_template
 
     # __name__ super variable qui contient le nom du module Python courant
@@ -136,9 +142,11 @@ Il est possible de passer des valeurs au fichier html à partir du Python en pas
         return render_template('index.html', contenu = contenu)
 
     if __name__ == "__main__":
-        app.run(debug=True)`
+        app.run(debug=True)
+***
+***
 
-    `<!-- fichier templates/index.html -->
+    <!-- fichier templates/index.html -->
 
     {% extends 'base.html' %}
 
@@ -154,23 +162,25 @@ Il est possible de passer des valeurs au fichier html à partir du Python en pas
             <li>{{el}}</li>
             {% endfor%}
         </ul>
-    {% endblock %}`
+    {% endblock %}
+***
 
 L'injection de valeurs se fait par `{{}}`. Il faut reprendre le nom de la variable donnée dans le `render_template()` du Python, et préciser entre `[]` la clé de la variable à injecter, puisque c'est un dictionnaire. A noter, qu'il est parfaitement possible de parcourir une liste avec un for dans le template `{% for el in contenu["menu"] %}`.
 
 ## URL dynamique
 
 Il est possible de passer des informations dans les URL grâce à la [règle de variable](https://flask.palletsprojects.com/en/1.1.x/quickstart/#variable-rules).
-
-    `# web.py 
+***
+    # web.py 
     #url dynamique
     @ap.route('/afficher/<string:mot>')
     def afficher(mot):
         # grâce au paramètre, qui porte le même nom que l'url dynamique,cette partie est récupérée dans la fonction
         # dans cette exemple, elle est passé en paramètre à la page web
-        return render_template('afficher.html', mot = mot)`
-
-    `<!-- fichier templates/afficher.html -->
+        return render_template('afficher.html', mot = mot)
+***
+***
+    <!-- fichier templates/afficher.html -->
     {% block content %}
         <!-- récupère  sous forme de variable la partie dynamique de l'URL -->
         <h1>{% block title %} {{mot}} {% endblock %}</h1>
@@ -178,12 +188,14 @@ Il est possible de passer des informations dans les URL grâce à la [règle de 
         <p>
             {{mot}}
         </p>
-    {% endblock %}`
+    {% endblock %}
+***
 
 Il ne reste plus qu'à générer l'URL dynamique, dans une page web, en passant un nouvel argument à `url_for()`.
-
-    `<!-- fichier templates/base.html -->
-    <a href="{{ url_for('afficher', mot='gorille')}}">Afficher mot</a`
+***
+    <!-- fichier templates/base.html -->
+    <a href="{{ url_for('afficher', mot='gorille')}}">Afficher mot</a
+***
 
 ## Documentation
 
