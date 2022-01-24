@@ -189,7 +189,7 @@ Il ne reste plus qu'à générer l'URL dynamique, dans une page web, en passant 
 
 - [la doc officielle](https://flask.palletsprojects.com/en/1.1.x/)
 - [Tuto VS Code](https://code.visualstudio.com/docs/python/tutorial-flask)
-- [TP Flask](file:C:/Users/Franky TANGUY/Code/Python/Flask2/kata_flask.pdf)
+- [TP Flask](kata_flask.pdf)
 
 ## Déploiement
 
